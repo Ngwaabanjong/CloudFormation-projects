@@ -56,10 +56,17 @@ OUTPUTS:
 	• Optional.
 	• It is used to define output values for a stack, for instance DNS hostname of an ELB
 	• Outputs can be viewed on AWS Management Console or in the response of AWS CLI calls.
-	• In advance level, they can be used to create cross-stack reference and pass values between nested stacks.
+	• In advance level, they can be used to create cross-stack references and pass values between nested stacks.
 
-# Deploy
-Once all this configuration is done, login to your AWS Console and deploy template.yml file on CloudFormation.
+# Deployment Steps:
+Login to AWS Console.
+Search AWS CloudFormation.
+Select: Create Stack -> With new resources (Standard)
+Select: Upload a template file -> select: the downloaded template.yml file -> Next.
+Give a name to your stack -> select key pair and subnet -> Next till create.
+
+# Delete Stack.
+Click stack and select delete.
 
 ***************************************************************************************************************
 
