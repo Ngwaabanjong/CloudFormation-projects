@@ -59,7 +59,7 @@ OUTPUTS:
 	• In advance level, they can be used to create cross-stack reference and pass values between nested stacks.
 
 # Deploy
-Once all this configuration is done, login to your AWS Console and deploy on CloudFormation.
+Once all this configuration is done, login to your AWS Console and deploy main.yml file on CloudFormation.
 
 ***************************************************************************************************************
 
