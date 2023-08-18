@@ -4,7 +4,7 @@ An AWS CloudFormation template is a JSON or YAML formatted text file that descri
 - To make it simple I will create a file for every section but the main.yml will have the complete template.
 
 # What will be done
-We will create a 2 tier VPC and its components.
+We will create a basic VPC and its components.
 We will create a security group
 We will create an ec2 instance in the VPC.
 
