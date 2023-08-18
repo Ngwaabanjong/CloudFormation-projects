@@ -1,0 +1,21 @@
+  # security group 5g ---
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup 
+    Properties:
+      GroupDescription: Activity security group 
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+              
+        # HTTP rule
+        -
+          CidrIp: 0.0.0.0/0 
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+
+        # SSH rule
+        -
+          CidrIp: 0.0.0.0/0 
+          IpProtocol: tcp
+          FromPort: 22 
+          ToPort: 22

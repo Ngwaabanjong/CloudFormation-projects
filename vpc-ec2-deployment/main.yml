@@ -1,0 +1,215 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  What this template will deploy. 
+  It launches a VPC with public and private subnets, 
+  a web server EC2 instance in the public subnet 
+  and a security group attached to this EC2 instance.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - 
+        Label:
+          default: Web Server Settings
+        Parameters:
+          - InstanceType
+          - EbsVolumeSize
+          - KeyPairName
+      - 
+        Label:
+          default: VPC Settings
+        Parameters:
+          - VpcCidrBlocks
+          - SubnetAZ
+    ParameterLabels:
+      SubnetAZ: 
+        default: Select an Availability Zone for the subnets
+      KeyPairName:
+        default: Select an EC2 key pair 
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: Ignatius-lab
+
+  InstanceType:
+    Type: String 
+    AllowedValues:
+      - t2.nano
+      - t2.micro 
+      - t2.small
+    Default: t2.micro
+  EbsVolumeSize:
+    Type: Number
+    Description: Volume size in GiB
+    Default: 10
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName 
+  VpcCidrBlocks:
+    Type: CommaDelimitedList
+    Description: 'vpc, public subnet, private subnet'
+    Default: '10.12.0.0/16, 10.12.1.0/24, 10.12.2.0/24'
+  SubnetAZ:
+    Type: AWS::EC2::AvailabilityZone::Name 
+
+Mappings:
+  RegionImages:
+    eu-west-1:
+      ImageId: ami-07683a44e80cd32c5
+    us-east-1:
+      ImageId: ami-0de53d8956e8dcf80
+
+Resources:
+  # vpc 5a ---
+  Vpc:
+    Type: AWS::EC2::VPC
+    Description: Section 5a VPC
+    Properties:
+      CidrBlock: !Select [ 0, !Ref VpcCidrBlocks ]
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-vpc'
+
+  # Subnets 5b ---        
+  PublicSubnet:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref SubnetAZ
+      CidrBlock: !Select [ 1, !Ref VpcCidrBlocks ]
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: Public Subnet
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref SubnetAZ
+      CidrBlock: !Select [ 2, !Ref VpcCidrBlocks ]
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: Private Subnet
+
+  # Route tables 5c ---
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable 
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: Public Route Table
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable 
+    Properties:
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: Private Route Table
+
+  # Internet route for the public route table 5d ---
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+  VpcGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+  InternetRoute:
+    Type: AWS::EC2::Route 
+    DependsOn:
+      - VpcGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      GatewayId: !Ref InternetGateway
+      DestinationCidrBlock: 0.0.0.0/0
+
+  # Subnet - Route table associations 5e ---    
+  PublicSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref PublicSubnet
+  PrivateSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref PrivateSubnet
+
+  # Web server  5f ---
+  WebServerInstance:
+    Type: AWS::EC2::Instance 
+    DependsOn:
+      - InternetRoute
+      - PublicSubnetRouteTableAssoc
+    Properties:
+      InstanceType: !Ref InstanceType 
+      SubnetId: !Ref PublicSubnet 
+      ImageId: !FindInMap [ RegionImages, !Ref 'AWS::Region', ImageId ]
+      KeyName: !Ref KeyPairName 
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      BlockDeviceMappings:
+        - 
+          DeviceName: /dev/sdf
+          Ebs:
+            VolumeSize: !Ref EbsVolumeSize
+            VolumeType: gp2
+      Tags:
+        -
+          Key: Name
+          Value: Web Server
+
+  # security group 5g ---
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup 
+    Properties:
+      GroupDescription: Activity security group 
+      VpcId: !Ref Vpc
+      SecurityGroupIngress:
+              
+        # HTTP rule
+        -
+          CidrIp: 0.0.0.0/0 
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+
+        # SSH rule
+        -
+          CidrIp: 0.0.0.0/0 
+          IpProtocol: tcp
+          FromPort: 22 
+          ToPort: 22
+
+  # output 
+Outputs:
+  InstanceID:
+    Description: The Instance ID
+    Value: !Ref WebServerInstance
+  SecurityGrpID:
+    Description: The Security group ID
+    Value: !Ref WebServerSecurityGroup
+  VpcId:
+    Description: The ID of the VPC that this stack is deployed in
+    Value: !Ref Vpc
+    Export:
+      Name: !Sub ${EnvironmentName}:VpcId
+  PublicSubnetID:
+    Description: Public subnet one
+    Value: !Ref PublicSubnet
+    Export:
+      Name: !Sub ${EnvironmentName}:PublicSubnetOne
+  PrivateSubnetID:
+    Description: Public subnet two
+    Value: !Ref PrivateSubnet
+    Export:
+      Name: !Sub ${EnvironmentName}:PublicSubnetTwo

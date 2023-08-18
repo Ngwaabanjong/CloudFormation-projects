@@ -1,0 +1,6 @@
+Mappings:
+  RegionImages:
+    eu-west-1:
+      ImageId: ami-07683a44e80cd32c5
+    us-east-1:
+      ImageId: ami-0de53d8956e8dcf80

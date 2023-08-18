@@ -1,0 +1,5 @@
+Description: >-
+  What this template deploy. 
+  It launches a VPC with public and private subnets, 
+  a web server EC2 instance in the public subnet 
+  and a security group attached to this EC2 instance.

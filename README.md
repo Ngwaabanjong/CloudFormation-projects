@@ -1,1 +1,1 @@
-# vpc-prjs
+# AWS CLOUDFORMATION PROJECTS

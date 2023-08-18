@@ -1,0 +1,23 @@
+  # Web server  5f ---
+  WebServerInstance:
+    Type: AWS::EC2::Instance 
+    DependsOn:
+      - InternetRoute
+      - PublicSubnetRouteTableAssoc
+    Properties:
+      InstanceType: !Ref InstanceType 
+      SubnetId: !Ref PublicSubnet 
+      ImageId: !FindInMap [ RegionImages, !Ref 'AWS::Region', ImageId ]
+      KeyName: !Ref KeyPairName 
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      BlockDeviceMappings:
+        - 
+          DeviceName: /dev/sdf
+          Ebs:
+            VolumeSize: !Ref EbsVolumeSize
+            VolumeType: gp2
+      Tags:
+        -
+          Key: Name
+          Value: Web Server

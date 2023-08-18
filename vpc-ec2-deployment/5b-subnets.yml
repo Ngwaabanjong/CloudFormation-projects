@@ -1,0 +1,23 @@
+  # Subnets 5b ---        
+  PublicSubnet:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref SubnetAZ
+      CidrBlock: !Select [ 1, !Ref VpcCidrBlocks ]
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: Public Subnet
+
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref SubnetAZ
+      CidrBlock: !Select [ 2, !Ref VpcCidrBlocks ]
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: Private Subnet

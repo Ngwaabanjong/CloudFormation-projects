@@ -1,0 +1,13 @@
+Resources:
+  # vpc 5a ---
+  Vpc:
+    Type: AWS::EC2::VPC
+    Description: Section 5a VPC
+    Properties:
+      CidrBlock: !Select [ 0, !Ref VpcCidrBlocks ]
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-vpc'

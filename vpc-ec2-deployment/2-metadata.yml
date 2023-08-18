@@ -1,0 +1,16 @@
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - 
+        Label:
+          default: Web Server Settings
+        Parameters:
+          - InstanceType
+          - EbsVolumeSize
+          - KeyPairName
+      - 
+        Label:
+          default: VPC Settings
+        Parameters:
+          - VpcCidrBlocks
+          - SubnetAZ

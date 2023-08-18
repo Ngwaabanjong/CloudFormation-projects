@@ -1,0 +1,23 @@
+  # output 
+Outputs:
+  InstanceID:
+    Description: The Instance ID
+    Value: !Ref WebServerInstance
+  SecurityGrpID:
+    Description: The Security group ID
+    Value: !Ref WebServerSecurityGroup
+  VpcId:
+    Description: The ID of the VPC that this stack is deployed in
+    Value: !Ref Vpc
+    Export:
+      Name: !Sub ${EnvironmentName}:VpcId
+  PublicSubnetID:
+    Description: Public subnet one
+    Value: !Ref PublicSubnet
+    Export:
+      Name: !Sub ${EnvironmentName}:PublicSubnetOne
+  PrivateSubnetID:
+    Description: Public subnet two
+    Value: !Ref PrivateSubnet
+    Export:
+      Name: !Sub ${EnvironmentName}:PublicSubnetTwo
