@@ -1,7 +1,7 @@
 # Deploy VPC, EC2 with CloudFormation in simple learning steps.
 # INTRODUCTION
 An AWS CloudFormation template is a JSON or YAML formatted text file that describes your AWS infrastructure. 
-- To make it simple I will create a file for every section but the main.yml will have the complete template.
+- To make it simple I will create a file for every section but the template.yml will have the complete template.
 
 # What will be done
 We will create a basic VPC and its components.
@@ -59,7 +59,7 @@ OUTPUTS:
 	• In advance level, they can be used to create cross-stack reference and pass values between nested stacks.
 
 # Deploy
-Once all this configuration is done, login to your AWS Console and deploy main.yml file on CloudFormation.
+Once all this configuration is done, login to your AWS Console and deploy template.yml file on CloudFormation.
 
 ***************************************************************************************************************
 
