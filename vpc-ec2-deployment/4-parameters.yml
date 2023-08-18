@@ -1,4 +1,8 @@
 Parameters:
+    EnvironmentName:
+    Type: String
+    Default: Ignatius-lab
+    
   InstanceType:
     Type: String 
     AllowedValues:
