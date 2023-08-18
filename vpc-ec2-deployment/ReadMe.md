@@ -58,9 +58,12 @@ OUTPUTS:
 	• Outputs can be viewed on AWS Management Console or in the response of AWS CLI calls.
 	• In advance level, they can be used to create cross-stack reference and pass values between nested stacks.
 
+# Deploy
+Once all this configuration is done, login to your AWS Console and deploy on CloudFormation.
+
 ***************************************************************************************************************
 
-#  Conditions - this will not be used in this template.
+#  Conditions - this will not be used on this template.
 CONDITIONS:
 	• Optional
 	• It used to define the statements which describes conditions under a resource can be created or configured.
