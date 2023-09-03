@@ -84,7 +84,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: Public Subnet
+          Value: !Sub '${AWS::StackName}-public-sub-01'
 
   PrivateSubnet:
     Type: AWS::EC2::Subnet 
@@ -95,7 +95,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: Private Subnet
+          Value: !Sub '${AWS::StackName}-private-sub-01'
 
   # Route tables 5c ---
   PublicRouteTable:
@@ -105,7 +105,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: Public Route Table
+          Value: !Sub '${AWS::StackName}-public-rt'
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable 
     Properties:
@@ -113,18 +113,23 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: Private Route Table
+          Value: !Sub '${AWS::StackName}-private-rt'
 
   # Internet route for the public route table 5d ---
   InternetGateway:
     Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-internet-gw'
   VpcGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
       VpcId: !Ref Vpc
       InternetGatewayId: !Ref InternetGateway
   InternetRoute:
-    Type: AWS::EC2::Route 
+    Type: AWS::EC2::Route
     DependsOn:
       - VpcGatewayAttachment
     Properties:
@@ -166,7 +171,7 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: Web Server
+          Value: !Sub '${AWS::StackName}-web-server'
 
   # security group 5g ---
   WebServerSecurityGroup:
@@ -189,6 +194,10 @@ Resources:
           IpProtocol: tcp
           FromPort: 22 
           ToPort: 22
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-security-group'
 
   # output 
 Outputs:
