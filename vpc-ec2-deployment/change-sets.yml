@@ -21,9 +21,15 @@ Metadata:
         Parameters:
           - VpcCidrBlocks
           - SubnetAZ
+          - AppSubnetAZ
+          - DataSubnetAZ
     ParameterLabels:
       SubnetAZ: 
         default: Select an Availability Zone for the subnets
+      AppSubnetAZ: 
+        default: Select an Availability Zone Application for the subnets
+      DataSubnetAZ: 
+        default: Select an Availability Zone Data for the subnets
       KeyPairName:
         default: Select an EC2 key pair 
 
@@ -49,8 +55,23 @@ Parameters:
     Type: CommaDelimitedList
     Description: 'vpc, public subnet, private subnet'
     Default: '10.12.0.0/16, 10.12.1.0/24, 10.12.2.0/24'
+  AppCidrBlocks:
+    Type: CommaDelimitedList
+    Description: 'public subnet, private subnet'
+    Default: '10.12.3.0/24, 10.12.4.0/24'
+  DataCidrBlocks:
+    Type: CommaDelimitedList
+    Description: 'public subnet, private subnet'
+    Default: '10.12.5.0/24, 10.12.6.0/24'
   SubnetAZ:
     Type: AWS::EC2::AvailabilityZone::Name 
+    Description: 'select Availability A'
+  AppSubnetAZ:
+    Type: AWS::EC2::AvailabilityZone::Name 
+    Description: 'select Availability Application'
+  DataSubnetAZ:
+    Type: AWS::EC2::AvailabilityZone::Name 
+    Description: 'select Availability Data'
 
 Mappings:
   RegionImages:
@@ -95,7 +116,56 @@ Resources:
       Tags:
         -
           Key: Name
-          Value: !Sub '${AWS::StackName}-private-sub-01'
+          Value: !Sub '${AWS::StackName}-public-sub-02' # re-naming from private to public
+
+  # Change-set - Application subnets
+  AppPrivateSubnet1:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref AppSubnetAZ
+      CidrBlock: !Select [ 0, !Ref AppCidrBlocks ]
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-private-app-sub-01'
+
+  AppPrivateSubnet2:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref AppSubnetAZ
+      CidrBlock: !Select [ 1, !Ref AppCidrBlocks ]
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-private-app-sub-02'
+
+  # Change-set - Data subnets
+  DataPrivateSubnet1:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref DataSubnetAZ
+      CidrBlock: !Select [ 0, !Ref DataCidrBlocks ]
+      MapPublicIpOnLaunch: true
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-private-data-sub-01'
+
+  DataPrivateSubnet2:
+    Type: AWS::EC2::Subnet 
+    Properties:
+      AvailabilityZone: !Ref DataSubnetAZ
+      CidrBlock: !Select [ 1, !Ref DataCidrBlocks ]
+      VpcId: !Ref Vpc
+      Tags:
+        -
+          Key: Name
+          Value: !Sub '${AWS::StackName}-private-data-sub-02'
+
 
   # Route tables 5c ---
   PublicRouteTable:
@@ -146,8 +216,32 @@ Resources:
   PrivateSubnetRouteTableAssoc:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
-      RouteTableId: !Ref PrivateRouteTable
+      RouteTableId: !Ref PublicRouteTable # re-routing from private to public
       SubnetId: !Ref PrivateSubnet
+
+  # Change-set - App Route Table Association
+  AppPublicSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref AppPrivateSubnet1
+  AppPrivateSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref AppPrivateSubnet2
+
+  # Change-set - Data Route Table Association
+  DataPublicSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref DataPrivateSubnet1
+  DataPrivateSubnetRouteTableAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref DataPrivateSubnet2
 
   # Web server  5f ---
   WebServerInstance:
