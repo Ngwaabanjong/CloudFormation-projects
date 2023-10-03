@@ -1,0 +1,63 @@
+[
+
+    {
+        "ParameterValue": "subnet-0ad59c546d76a1864",
+        "ParameterKey": "SubnetID"
+    },
+    {
+        "ParameterValue": "sg-0b52fa29523a310b5",
+        "ParameterKey": "InstanceSecurityGroupId"
+    },
+    {
+        "ParameterValue": "t2.small",
+        "ParameterKey": "InstanceType"
+    },
+    {
+        "ParameterValue": "bjuatkey",
+        "ParameterKey": "KeyName"
+    },
+    {
+        "ParameterValue": "io1",
+        "ParameterKey": "VolumeEbsType"
+    },
+    {
+        "ParameterValue": "200",
+        "ParameterKey": "IopsEbsSize"
+    },
+    {
+        "ParameterValue": "8",
+        "ParameterKey": "VolumeEbsSize"
+    },
+    {
+        "ParameterValue": "1245",
+        "ParameterKey": "CostAllocation"
+    },
+    {
+        "ParameterValue": "dev",
+        "ParameterKey": "Environment"
+    },
+    {
+        "ParameterValue": "eus1",
+        "ParameterKey": "Region"
+    },
+    {
+        "ParameterValue": "01",
+        "ParameterKey": "Version"
+    },
+    {
+        "ParameterValue": "Ignatius Ngwaabanjong",
+        "ParameterKey": "CreatedBy"
+    },
+    {
+        "ParameterValue": "AWS Cloud Services",
+        "ParameterKey": "Group"
+    },
+    {
+        "ParameterValue": "44044245",
+        "ParameterKey": "projectID"
+    },
+    {
+        "ParameterValue": "Portfolio Sample",
+        "ParameterKey": "projectName"
+    }
+]

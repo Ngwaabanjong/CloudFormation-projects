@@ -75,6 +75,33 @@ Parameters:
     - cc2.8xlarge
     - cg1.4xlarge
     ConstraintDescription: must be a valid EC2 instance type.
+# volume
+  VolumeEbsType:
+    Description: ebs volume type
+    Type: String
+    Default: "io1"
+    AllowedValues:
+      - "io1"
+      - "io2" 
+  IopsEbsSize:
+    Description: volume iops 
+    Type: Number
+    Default: 200
+    AllowedValues:
+      - 100
+      - 200
+      - 400
+  VolumeEbsSize: 
+    Description: volume size
+    Type: Number
+    Default: 8
+    AllowedValues:
+      - 8
+      - 20
+  DeleteEbsOnTermination: 
+    Description: delete volume on instance termination 
+    Type: String
+    Default: true
 
 #tags
   ProjectName:
@@ -121,11 +148,19 @@ Resources:
   MyEC2Instance: 
     Type: "AWS::EC2::Instance"
     Properties: 
-      ImageId: "ami-0ff8a91507f77f867" 
+      ImageId: "ami-03a6eaae9938c858c" 
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
       SecurityGroupIds: !Ref InstanceSecurityGroupId
       SubnetId: !Select [0, !Ref mySubnetIDs]  # Use the first subnet ID from the list
+      BlockDeviceMappings:
+        -
+          DeviceName: /dev/sdm
+          Ebs:
+            VolumeType: !Ref VolumeEbsType
+            Iops: !Ref IopsEbsSize
+            DeleteOnTermination: !Ref DeleteEbsOnTermination
+            VolumeSize: !Ref VolumeEbsSize
       Tags:
         - Key: "Name"
           Value:
