@@ -1,7 +1,7 @@
 ---
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'AWS CloudFormation EC2 Instance Sample Template for Service Catalog Use Case from www.ngwaabanjong.com:
-  Create an Amazon EC2 instance with your chosen Amazon EC2 AMI.' 
+  Create an Amazon EC2 instance with your chosen Amazon EC2 AMI and selected extra volume and sizes' 
 
 Parameters:
   KeyName:
