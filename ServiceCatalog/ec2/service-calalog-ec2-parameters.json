@@ -1,11 +1,11 @@
 [
 
     {
-        "ParameterValue": "subnet-0ad59c546d76a1864",
+        "ParameterValue": "subnet-0ad59c546XXXXXXX",
         "ParameterKey": "SubnetID"
     },
     {
-        "ParameterValue": "sg-0b52fa29523a310b5",
+        "ParameterValue": "sg-0b52fa29523XXXXX",
         "ParameterKey": "InstanceSecurityGroupId"
     },
     {
@@ -13,24 +13,16 @@
         "ParameterKey": "InstanceType"
     },
     {
-        "ParameterValue": "bjuatkey",
+        "ParameterValue": "mypemkey",
         "ParameterKey": "KeyName"
-    },
-    {
-        "ParameterValue": "io1",
-        "ParameterKey": "VolumeEbsType"
-    },
-    {
-        "ParameterValue": "200",
-        "ParameterKey": "IopsEbsSize"
-    },
-    {
-        "ParameterValue": "8",
-        "ParameterKey": "VolumeEbsSize"
     },
     {
         "ParameterValue": "dev",
         "ParameterKey": "Environment"
+    },
+    {
+        "ParameterValue": "187D",
+        "ParameterKey": "CostAllocation"
     },
     {
         "ParameterValue": "eus1",
