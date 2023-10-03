@@ -157,14 +157,14 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds: !Ref InstanceSecurityGroupId
       SubnetId: !Select [0, !Ref mySubnetIDs]  # Use the first subnet ID from the list
-      BlockDeviceMappings:
-        -
-          DeviceName: /dev/sdm
-          Ebs:
-            VolumeType: !Ref VolumeEbsType
-            Iops: !Ref IopsEbsSize
-            DeleteOnTermination: !Ref DeleteEbsOnTermination
-            VolumeSize: !Ref VolumeEbsSize
+      # BlockDeviceMappings:
+      #   -
+      #     DeviceName: /dev/sdm
+      #     Ebs:
+      #       VolumeType: !Ref VolumeEbsType
+      #       Iops: !Ref IopsEbsSize
+      #       DeleteOnTermination: !Ref DeleteEbsOnTermination
+      #       VolumeSize: !Ref VolumeEbsSize
       Tags:
         - Key: "Name"
           Value:
@@ -185,6 +185,28 @@ Resources:
           Value: !Ref Environment
         - Key: "Project ID"
           Value: !Ref projectID
+  NewVolume:
+    Type: AWS::EC2::Volume
+    Properties:
+      Size: 
+        !Ref VolumeEbsSize
+      VolumeType:
+        !Ref VolumeEbsType
+      Iops: 
+        !Ref IopsEbsSize
+      AvailabilityZone: !GetAtt MyEC2Instance.AvailabilityZone
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-volume'
+    DeletionPolicy: Snapshot
+
+
+  MountPoint:
+    Type: AWS::EC2::VolumeAttachment
+    Properties:
+      InstanceId: !Ref MyEC2Instance
+      VolumeId: !Ref NewVolume
+      Device: /dev/sdh
 
 Outputs:
   InstanceId:
