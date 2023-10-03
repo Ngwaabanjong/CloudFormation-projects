@@ -8,6 +8,10 @@ Parameters:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
     Type: AWS::EC2::KeyPair::KeyName
     ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  Ec2AmiId:
+    Description: Specific AMI ID
+    Type: String
+    Default: ami-03a6eaae9938c858c
   mySubnetIDs: 
     Description: Subnet IDs
     Type: 'List<AWS::EC2::Subnet::Id>'
@@ -121,7 +125,7 @@ Resources:
   MyEC2Instance: 
     Type: "AWS::EC2::Instance"
     Properties: 
-      ImageId: "ami-0ff8a91507f77f867" 
+      ImageId: !Ref Ec2AmiId  
       InstanceType: !Ref InstanceType
       KeyName: !Ref KeyName
       SecurityGroupIds: !Ref InstanceSecurityGroupId
