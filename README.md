@@ -10,4 +10,8 @@ Deploying Stack with User profile and parameter file:
 ```
 aws --profile default cloudformation create-stack --stack-name c10-stack --template-body file://C10.yaml --parameters file://C10.parameters --capabilities CAPABILITY_NAMED_IAM
 ```
+Delete
+```
+aws cloudformation delete-stack --stack-name <name>
+```
 
