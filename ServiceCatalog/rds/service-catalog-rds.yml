@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Description": "AWS CloudFormation Sample Template for creating an Amazon RDS DB instance:
+  Description: "AWS CloudFormation Sample Template for creating an Amazon RDS DB instance:"
 
 Parameters:
   DBInstanceID:
@@ -72,6 +72,14 @@ Parameters:
     Description: Db Subnet group tag
     Type: String
     Default: uat
+  PublicAccess:
+    Description: Whether the DB instance is public.
+    Type: String
+    Default: true
+    AllowedValues:
+      - true
+      - false
+
 Resources:
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
@@ -94,5 +102,6 @@ Resources:
       Engine: !Ref DBEngineType
       EngineVersion: !Ref DBEngineVersion
       MasterUsername: !Ref DBUsername
+      PubliclyAccessible: !Ref PublicAccess
       MasterUserPassword: !Ref DBPassword
       DBSubnetGroupName: !Ref DBSubnetGroup
